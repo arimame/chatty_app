@@ -2,17 +2,18 @@
 import React, {Component} from 'react';
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
+import { generateRandomId } from "./RandomNum.js";
 
 const data = {
   currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
   messages: [
     {
-      id: 1,
+      id: generateRandomId(),
       username: "Bob",
       content: "Has anyone seen my marbles?",
     },
     {
-      id: 2,
+      id: generateRandomId(),
       username: "Anonymous",
       content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
     }
@@ -23,7 +24,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {messages: data.messages, currentUser: data.currentUser};
-    this.addNewMessage = this.addNewMessage.bind(this)
+    this.addNewMessage = this.addNewMessage.bind(this) //this functionality belongs to this component and pass to its children.
   }
 
 //   componentDidMount() {
@@ -41,12 +42,13 @@ class App extends Component {
 
   addNewMessage(message) {
     const newMessage = {
-      id: 3,
+      id: generateRandomId(),
       username: this.state.currentUser.name,
       content: message
     };
     const messages = this.state.messages.concat(newMessage);
     this.setState({messages: messages})
+
     };
 
 
