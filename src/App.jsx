@@ -8,7 +8,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {messages:[], currentUser: {name: "Bob"}};
-    this.addNewMessage = this.addNewMessage.bind(this) //this functionality belongs to this component and pass to its children.
+    this.addNewMessage = this.addNewMessage.bind(this)
+    this.addNewUser = this.addNewUser.bind(this)
+     //this functionality belongs to this component and pass to its children.
   }
 
   componentDidMount() {
@@ -34,13 +36,17 @@ class App extends Component {
       }
   }
 
+   addNewUser(name) {
+   this.setState({currentUser: {name: name}});
+  }
+
 
 
   render() {
     return (
       <div>
       <Navbar />
-      <ChatBar currentUser= {this.state.currentUser} addNewMessage={this.addNewMessage}/>
+      <ChatBar currentUser= {this.state.currentUser} addNewMessage={this.addNewMessage} addNewUser={this.addNewUser}/>
       <MessageList messages={this.state.messages} />
       </div>
     );
