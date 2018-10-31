@@ -5,7 +5,6 @@ class ChatBar extends Component {
   enterPressed(event) {
     var code = event.keyCode || event.which;
     if(code === 13) {
-      console.log(event.target.value);
       const newMessageInput = event.target;
       this.props.addNewMessage(newMessageInput.value);
       newMessageInput.value = " ";
