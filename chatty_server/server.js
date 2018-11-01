@@ -24,12 +24,15 @@ wss.on('connection', (ws) => {
   let numberOfUsers = {type: "userNotification", users: setSize};
   boardcast(numberOfUsers);
 
+  const colour = ["teal", "pink", "purple", "orange"];
+  const random = Math.floor(Math.random()* colour.length);
+  const userColour = {type: "colour", colour: colour[random]};
+  console.log(userColour);
+  ws.send(JSON.stringify(userColour));
+
   ws.on("message", (data) => {
   let msg = JSON.parse(data);
   if(msg.type === "postMessage") {
-    if(msg.username.length === 0) {
-      msg.username = "anonymous";
-    }
     console.log(`${msg.username} says ${msg.content}`);
     //adding uuid to message object
     msg.id = uuid();

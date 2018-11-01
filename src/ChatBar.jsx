@@ -14,6 +14,7 @@ class ChatBar extends Component {
   enterPressedName(event) {
     var code = event.keyCode || event.which;
     if(code === 13) {
+
       const newUsername = event.target;
       this.props.addNewUser(newUsername.value);
     }
@@ -22,7 +23,7 @@ class ChatBar extends Component {
   render() {
     return (
       <footer className="chatbar">
-      <input className="chatbar-username" placeholder = "Your name (optional)" defaultValue={this.props.currentUser.name} onKeyUp={this.enterPressedName.bind(this)}/>
+      <input className="chatbar-username" placeholder = "Your name (optional)" onKeyUp={this.enterPressedName.bind(this)}/>
       <input className="chatbar-message" placeholder="Type a message and hit ENTER" onKeyUp={this.enterPressed.bind(this)}/>
       </footer>
     );

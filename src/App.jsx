@@ -7,7 +7,7 @@ import MessageList from './MessageList.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {messages:[], currentUser: {name: ""}, numberofUsers: 0};
+    this.state = {messages:[], currentUser: {name: "anonymous", colour: "black"}, numberofUsers: 0};
     this.addNewMessage = this.addNewMessage.bind(this)
     this.addNewUser = this.addNewUser.bind(this)
      //this functionality belongs to this component and pass to its children.
@@ -26,12 +26,16 @@ class App extends Component {
         console.log("1", msg)
         const messages = this.state.messages.concat(msg);
         this.setState({messages: messages})
-
       } else if (msg.type === "userNotification"){
         console.log("2", msg);
         this.setState({numberofUsers: msg.users})
-
-        console.log("is this working?", this.state.numberofUsers);
+      } else if (msg.type === "colour") {
+      console.log("3", msg);
+      this.setState({currentUser: {
+        ...this.state.currentUser,
+        colour: msg.colour
+      }})
+      console.log(this.state.currentUser);
     }
   }
 }
@@ -41,7 +45,8 @@ class App extends Component {
     const newMessage = {
       type: "postMessage",
       username: this.state.currentUser.name,
-      content: message
+      content: message,
+      colour: this.state.currentUser.colour
     };
     //sending message to server
     this.socket.send(JSON.stringify(newMessage));
@@ -53,7 +58,10 @@ class App extends Component {
       type: "postNotification",
       content: `${this.state.currentUser.name} has changed their name to ${name}`
     }
-   this.setState({currentUser: {name: name}});
+  this.setState({currentUser: {
+    ...this.state.currentUser,
+    name: name
+  }});
    this.socket.send(JSON.stringify(postNotification));
   }
 
@@ -62,7 +70,7 @@ class App extends Component {
       <div>
       <Navbar numberofUsers ={this.state.numberofUsers} />
       <ChatBar currentUser= {this.state.currentUser} addNewMessage={this.addNewMessage} addNewUser={this.addNewUser}/>
-      <MessageList messages={this.state.messages} notification={this.props.notification} />
+      <MessageList messages={this.state.messages} currentUser= {this.state.currentUser}/>
       </div>
     );
   }
