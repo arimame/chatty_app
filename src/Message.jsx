@@ -2,16 +2,17 @@ import React, {Component} from 'react';
 
 class Message extends Component {
   render() {
-    return (
-    <div>
-  <div className="message">
+    let post;
+    if (this.props.messages.type === "incomingNotification") {
+    post = (<div className="message system">{this.props.messages.content}</div>)
+    } else if (this.props.messages.type === "incomingMessage") {
+    post =  (<div className="message">
     <span className="message-username">{this.props.messages.username}</span>
     <span className="message-content">{this.props.messages.content}</span>
-  </div>
-  <div className="message system">
+  </div>)}
 
-  </div>
-  </div>
+    return (
+    <div>{post}</div>
     );
   }
 }

@@ -7,7 +7,7 @@ import MessageList from './MessageList.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {messages:[], currentUser: {name: "Bob"}};
+    this.state = {messages:[], currentUser: {name: ""}, numberofUsers: 0};
     this.addNewMessage = this.addNewMessage.bind(this)
     this.addNewUser = this.addNewUser.bind(this)
      //this functionality belongs to this component and pass to its children.
@@ -18,36 +18,51 @@ class App extends Component {
     this.socket.onopen = function (ev) {
       console.log("Connected to the server");
     }
+    //getting message from server
+     this.socket.onmessage = (event) => {
+      const msg = JSON.parse(event.data);
+      //console.log(msg);
+      if((msg.type === "incomingMessage") || (msg.type === "incomingNotification")) {
+        console.log("1", msg)
+        const messages = this.state.messages.concat(msg);
+        this.setState({messages: messages})
+
+      } else if (msg.type === "userNotification"){
+        console.log("2", msg);
+        this.setState({numberofUsers: msg.users})
+
+        console.log("is this working?", this.state.numberofUsers);
+    }
+  }
 }
 
 
   addNewMessage(message) {
     const newMessage = {
+      type: "postMessage",
       username: this.state.currentUser.name,
       content: message
     };
     //sending message to server
     this.socket.send(JSON.stringify(newMessage));
-    //getting message from server
-    this.socket.onmessage = (event) => {
-      const msg = JSON.parse(event.data);
-      const messages = this.state.messages.concat(msg);
-      this.setState({messages: messages})
-      }
+
   }
 
    addNewUser(name) {
+    const postNotification = {
+      type: "postNotification",
+      content: `${this.state.currentUser.name} has changed their name to ${name}`
+    }
    this.setState({currentUser: {name: name}});
+   this.socket.send(JSON.stringify(postNotification));
   }
-
-
 
   render() {
     return (
       <div>
-      <Navbar />
+      <Navbar numberofUsers ={this.state.numberofUsers} />
       <ChatBar currentUser= {this.state.currentUser} addNewMessage={this.addNewMessage} addNewUser={this.addNewUser}/>
-      <MessageList messages={this.state.messages} />
+      <MessageList messages={this.state.messages} notification={this.props.notification} />
       </div>
     );
   }
@@ -56,7 +71,9 @@ class App extends Component {
 class Navbar extends Component {
   render () {
   return (
-  <div className = "navbar navbar-brand">Chatty</div>)
+  <div className = "navbar navbar-brand">Chatty <span className = "users">{this.props.numberofUsers} users online</span>
+  </div>
+  )
   }
 }
 

@@ -19,12 +19,25 @@ const wss = new SocketServer({ server });
 
 wss.on('connection', (ws) => {
   console.log('Client connected');
+  console.log("set size", wss.clients.size);
+  const setSize = wss.clients.size;
+  let numberOfUsers = {type: "userNotification", users: setSize};
+  boardcast(numberOfUsers);
+
   ws.on("message", (data) => {
   let msg = JSON.parse(data);
-  console.log(`${msg.username} says ${msg.content}`);
-  //adding uuid to message object
-  msg.id = uuid();
-  boardcast(msg);
+  if(msg.type === "postMessage") {
+    if(msg.username.length === 0) {
+      msg.username = "anonymous";
+    }
+    console.log(`${msg.username} says ${msg.content}`);
+    //adding uuid to message object
+    msg.id = uuid();
+    msg.type = "incomingMessage";
+  } else if (msg.type === "postNotification") {
+      msg.type = "incomingNotification"
+  }
+    boardcast(msg);
 });
 
 //function sends messages to clients
@@ -35,7 +48,13 @@ function boardcast (data) {
 }
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {
+    console.log('Client disconnected');
+    const setSize = wss.clients.size;
+    var numberOfUsers = {type: "userNotification", users: setSize};
+    boardcast(numberOfUsers);
+  });
+
 });
 
 
