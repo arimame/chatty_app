@@ -11,7 +11,7 @@ class Message extends Component {
         )
 
     } else if (this.props.messages.type === "incomingMessage") {
-      //looks for url
+      //looks for url in string
       var regex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/;
       var content = this.props.messages.content;
       var match = content.match(regex);
@@ -21,7 +21,7 @@ class Message extends Component {
         post = (
           <div className="message">
             <span className="message-username" style={{color:this.props.messages.colour}}>{this.props.messages.username}</span>
-            <span className="message-content">{this.props.messages.content}<img className="message-content img" src={url}/></span>
+            <span className="message-content"><img className="message-content img" src={url}/></span>
          </div>)
       } else {
         //if there is no image, render this
