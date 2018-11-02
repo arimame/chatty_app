@@ -19,7 +19,6 @@ wss.on("connection", (ws) => {
   const colour = ["teal", "pink", "purple", "orange"];
   const random = Math.floor(Math.random()* colour.length);
   const userColour = {type: "colour", colour: colour[random]};
-  console.log(userColour);
   ws.send(JSON.stringify(userColour));
 
   ws.on("message", (data) => {
