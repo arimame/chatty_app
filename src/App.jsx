@@ -8,8 +8,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {messages:[], currentUser: {name: "anonymous", colour: "black"}, numberofUsers: 0};
-    this.addNewMessage = this.addNewMessage.bind(this)
-    this.addNewUser = this.addNewUser.bind(this)
+    this.addNewMessage = this.addNewMessage.bind(this);
+    this.addNewUser = this.addNewUser.bind(this);
   }
 
   componentDidMount() {
