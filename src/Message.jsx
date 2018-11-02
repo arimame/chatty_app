@@ -4,28 +4,36 @@ class Message extends Component {
   render() {
 
     let post;
+
     if (this.props.messages.type === "incomingNotification") {
-    post = (<div className="message system">{this.props.messages.content}</div>)
+      post = (
+        <div className="message system">{this.props.messages.content}</div>
+        )
+
     } else if (this.props.messages.type === "incomingMessage") {
-      // var regex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/i;
-      // var content = this.props.messages.content;
-      // var match = content.split(regex);
-      // console.log(match);
-      // console.log(this.props.messages.content)
-  //     if(match) {
-  //       post = (<div className="message">
-  //   <span className="message-username" style={{color:this.props.messages.colour}}>{this.props.messages.username}</span>
-  //   <img className="message-content" src={this.props.messages.content}/>
-  // </div>)
-  //     } else {
-         post =  (<div className="message">
-    <span className="message-username" style={{color:this.props.messages.colour}}>{this.props.messages.username}</span>
-    <span className="message-content">{this.props.messages.content}</span>
-  </div>)}
-      // }
+      //looks for url
+      var regex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/;
+      var content = this.props.messages.content;
+      var match = content.match(regex);
+      if(match) {
+        //if there is an image, render this
+        var url = match[0];
+        post = (
+          <div className="message">
+            <span className="message-username" style={{color:this.props.messages.colour}}>{this.props.messages.username}</span>
+            <span className="message-content">{this.props.messages.content}<img className="message-content" src={url}/></span>
+         </div>)
+      } else {
+        //if there is no image, render this
+         post =  (
+          <div className="message">
+            <span className="message-username" style={{color:this.props.messages.colour}}>{this.props.messages.username}</span>
+            <span className="message-content">{this.props.messages.content}</span>
+          </div>
+          )}
+      }
 
-
-    return (
+  return (
     <div>{post}</div>
     );
   }
