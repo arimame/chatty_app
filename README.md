@@ -26,9 +26,9 @@ Client side:
 - react-dom
 
 Server side:
--express
--ws
--uuid
+- express
+- ws
+- uuid
 
 
 ## Getting Started
